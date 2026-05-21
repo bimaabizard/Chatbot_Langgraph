@@ -1,0 +1,27 @@
+version: '3.8'
+services:
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_URL=redis://redis:6379
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+    depends_on:
+      - redis
+  
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  # Proves you know enterprise monitoring
+  prometheus:
+    image: prom/prometheus
+    ports:
+      - "9090:9090"
+
+volumes:
+  redis_data:
